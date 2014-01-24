@@ -210,12 +210,9 @@ void Tracker::FindBlobSeq(IplImage *im)
 	if (!lblobseqref.size())
 		return;
 
-	int id=0;
-	int bid=0;
-	
 	map<unsigned, unsigned> ovl;
 		
-	for(list<blobseq*>::iterator lblob = lblobseq.begin(); lblob != lblobseq.end(); lblob++,bid++)
+	for(list<blobseq*>::iterator lblob = lblobseq.begin(); lblob != lblobseq.end(); lblob++)
 	{
 		m_tableseq.MatchID((*lblob));
 	
@@ -261,7 +258,6 @@ void Tracker::FindBlobSeq(IplImage *im)
 				
 			}
 		}
-		id++;
 	}
 
 	//reset the unselected blob
@@ -285,6 +281,9 @@ void Tracker::FindBlobSeq(IplImage *im)
 			{
 				unsigned id = (unsigned)(*dt);
 				advance(ref, id);
+				if ((*ref)->overlap) //check other previously detected
+					continue;
+				
 				list<blobseq*>::iterator lblob = lblobseq.begin();
 				bool found = false;
 				for(; lblob != lblobseq.end(); lblob++)

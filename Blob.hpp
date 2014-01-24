@@ -220,7 +220,7 @@ int blobseq::ComputeHomography(blobseq* ref, IplImage *im)
 		cvmSet(m2, 1, i, pt2->y);
 	}
 	
-	cvFindHomography(m1,m2, homography, CV_RANSAC, 1);
+	cvFindHomography(m1,m2, homography, CV_RANSAC, 3);
 
 	cvReleaseMat(&m2);
 	cvReleaseMat(&m1);

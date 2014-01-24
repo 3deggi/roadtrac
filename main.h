@@ -29,7 +29,7 @@
 #define LMOPTIMIZEINV	1			//fitting from the extracted contour to template, orelse fitting from the template to extracted contour
 #define LMRAWCONTOUR	1			//using non simplified contour for optimization
 #define LIMITPOLY		1			//limiting the number of polygon to the number of elements
-#define LMRAWCONTOURN	80			//limit the contour only using n element
+#define LMRAWCONTOURN	100			//limit the contour only using n element
 #define CLEANRAW		1			//cleaning the raw contours
 #define LMMAXERR		0.0001		//maximum error
 #define LMITER			100			//lm optimization iteration
