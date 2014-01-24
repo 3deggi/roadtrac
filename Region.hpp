@@ -86,16 +86,12 @@ void Region::ExtractContour(CvSeq* cont)
 	if (!cont)
 		return;
 
-	double area = cvContourArea(cont);
-	
+	double area = cvContourArea(cont);	
 	CvSeq* oldcontour = cont;
 
 	cont = cvApproxPoly(cont, sizeof(CvContour),cont->storage, CV_POLY_APPROX_DP , 3, 0);
-		
 	if ((cont->total<MINPOINTS&&LIMITREGION)||(area<MINAREA&&LIMITREGION))
-	{
 		return;
-	}
 
 	numcontour++;
 

@@ -132,7 +132,7 @@ void process()
 	reg.ExtractRegions(im);
 	m_tracker.CreateBlobSeq(&reg);	
 	m_tracker.FindBlobSeq(im);
-	m_tracker.DrawBorder(bg);
+	m_tracker.PostProcess(bg);
 	reg.Clear();
 	m_tracker.ClearBlobSeq();
 }
@@ -423,16 +423,19 @@ int main(int argc, char **argv) {
 		exit(0);
 	} else
 	{
-		IplImage *templ = cvLoadImage(argv[1]);
-		reg.ExtractRegions(templ);	
-		m_tracker.CreateBlobSeq(&reg);
-		
 		char paperlist[100];
 		sprintf_s(paperlist,100, "paperlist.%s.txt", argv[1]);
-
-		m_tracker.SaveBlobSeq(paperlist);
-		reg.Clear();
-		m_tracker.Clear();
+		ifstream paperfile(paperlist);
+		if (!paperfile) //if doesnt exist
+		{
+			IplImage *templ = cvLoadImage(argv[1]);
+			reg.ExtractRegions(templ);	
+			m_tracker.CreateBlobSeq(&reg);
+			m_tracker.SaveBlobSeq(paperlist);
+	
+			reg.Clear();
+			m_tracker.Clear();
+		}
 
 		m_tracker.LoadBlobSeq(paperlist);
 

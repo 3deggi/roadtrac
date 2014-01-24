@@ -32,7 +32,7 @@ public:
 	void LoadBlobLabels(const char* name);
 
 	void FindBlobSeq(IplImage *im);
-	void DrawBorder(IplImage *im);
+	void PostProcess(IplImage *im);
 	void DrawSingleBorder(IplImage *im, blobseq *lblob);
 	void ClearBlobSeq();
 	void Update(blobseq *lblob);
@@ -41,9 +41,7 @@ public:
 	list<blobseq*> lblobseq;	//current list of region
 	list<blobseq*> lblobseqref; //database of region
 
-	//for recall
 	set<unsigned> detected;
-	set<unsigned> undetected;
 
 	IplImage *grayImg;
 private:
@@ -56,7 +54,6 @@ void Tracker::Clear()
 	m_tableseq.Clear();
 	lblobseqref.clear();
 	detected.clear();
-	undetected.clear();
 	ClearBlobSeq();
 }
 
@@ -264,8 +261,6 @@ void Tracker::FindBlobSeq(IplImage *im)
 				
 			}
 		}
-		else
-			undetected.insert(id);
 		id++;
 	}
 
@@ -330,40 +325,37 @@ void Tracker::DrawSingleBorder(IplImage *im, blobseq *lblob)
 
 	if (lblob->id!=NOID&&lblob->overlap)
 	{	
-		if (DRAWBORDER)
-		{
-			list<blobseq*>::const_iterator ref = lblobseqref.begin();
-			advance(ref, lblob->id);
+		list<blobseq*>::const_iterator ref = lblobseqref.begin();
+		advance(ref, lblob->id);
 		 
-			CvRect rect = (*ref)->bound;
+		CvRect rect = (*ref)->bound;
 		
-			double bo[12] = {
-				rect.x, rect.x + rect.width, rect.x + rect.width, rect.x,
-				rect.y, rect.y, rect.y + rect.height, rect.y + rect.height,
-				1,      1,      1, 1,
-			};
-			CvMat mbo = cvMat(3, 4, MAT_TYPE, bo);
-			CvMat *res = cvCreateMat(3, 4, MAT_TYPE);
-			cvMatMul(lblob->homography, &mbo, res);
+		double bo[12] = {
+			rect.x, rect.x + rect.width, rect.x + rect.width, rect.x,
+			rect.y, rect.y, rect.y + rect.height, rect.y + rect.height,
+			1,      1,      1, 1,
+		};
+		CvMat mbo = cvMat(3, 4, MAT_TYPE, bo);
+		CvMat *res = cvCreateMat(3, 4, MAT_TYPE);
+		cvMatMul(lblob->homography, &mbo, res);
 
-			for (int i=0;i<3;i++)
-			{
-				CvPoint p1 = cvPoint((int)(IMG_SCALE*cvmGet(res, 0, i)/cvmGet(res, 2, i)),(int)(IMG_SCALE*cvmGet(res, 1, i)/cvmGet(res, 2, i)));
-				CvPoint p2 = cvPoint((int)(IMG_SCALE*cvmGet(res, 0, i+1)/cvmGet(res, 2, i+1)),(int)(IMG_SCALE*cvmGet(res, 1, i+1)/cvmGet(res, 2, i+1)));
-				if (im->nChannels==4)
-					cvLine(im, p1, p2, cvScalar(255,0,0, 255),1, CV_AA );
-				else
-				cvLine(im, p1, p2, CV_RGB(255,0,0),1, CV_AA );
-			}
-			CvPoint p1 =  cvPoint((int)(IMG_SCALE*cvmGet(res, 0, 0)/cvmGet(res, 2, 0)),(int)(IMG_SCALE*cvmGet(res, 1, 0)/cvmGet(res, 2, 0)));
-			CvPoint p2 = cvPoint((int)(IMG_SCALE*cvmGet(res, 0, 3)/cvmGet(res, 2, 3)),(int)(IMG_SCALE*cvmGet(res, 1, 3)/cvmGet(res, 2, 3))); 
+		for (int i=0;i<3;i++)
+		{
+			CvPoint p1 = cvPoint((int)(IMG_SCALE*cvmGet(res, 0, i)/cvmGet(res, 2, i)),(int)(IMG_SCALE*cvmGet(res, 1, i)/cvmGet(res, 2, i)));
+			CvPoint p2 = cvPoint((int)(IMG_SCALE*cvmGet(res, 0, i+1)/cvmGet(res, 2, i+1)),(int)(IMG_SCALE*cvmGet(res, 1, i+1)/cvmGet(res, 2, i+1)));
 			if (im->nChannels==4)
-					cvLine(im, p1, p2, cvScalar(255,0,0, 255),1, CV_AA );
+				cvLine(im, p1, p2, cvScalar(255,0,0, 255),1, CV_AA );
 			else
-				cvLine(im, p1, p2, CV_RGB(255,0,0),1, CV_AA );		
-			cvReleaseMat(&res);
+			cvLine(im, p1, p2, CV_RGB(255,0,0),1, CV_AA );
 		}
-		detected.insert(lblob->id);
+		CvPoint p1 =  cvPoint((int)(IMG_SCALE*cvmGet(res, 0, 0)/cvmGet(res, 2, 0)),(int)(IMG_SCALE*cvmGet(res, 1, 0)/cvmGet(res, 2, 0)));
+		CvPoint p2 = cvPoint((int)(IMG_SCALE*cvmGet(res, 0, 3)/cvmGet(res, 2, 3)),(int)(IMG_SCALE*cvmGet(res, 1, 3)/cvmGet(res, 2, 3))); 
+		if (im->nChannels==4)
+				cvLine(im, p1, p2, cvScalar(255,0,0, 255),1, CV_AA );
+		else
+			cvLine(im, p1, p2, CV_RGB(255,0,0),1, CV_AA );		
+		cvReleaseMat(&res);
+		
 	}		
 }
 
@@ -412,15 +404,17 @@ void Tracker::Update(blobseq *lblob)
 	}
 }
 
-void Tracker::DrawBorder(IplImage *im)
+void Tracker::PostProcess(IplImage *im)
 {
 	if (!im)
 		return;
 
 	for(list<blobseq*>::const_iterator lblob = lblobseq.begin(); lblob != lblobseq.end(); lblob++)
 	{		
-		
-		DrawSingleBorder(im, (*lblob));
+		if ((*lblob)->id!=NOID&&(*lblob)->overlap)
+			detected.insert((*lblob)->id);
+		if (DRAWBORDER)
+			DrawSingleBorder(im, (*lblob));
 		if (UPDATE)
 			Update(*lblob);
 	}

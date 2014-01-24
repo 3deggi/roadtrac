@@ -10,12 +10,10 @@
 #define IMG_SCALE		2.0			//the image scale for processing image
 #define IMG_WIDTH		640			//image width
 #define IMG_HEIGHT		480			//image height
-#define MIN_DCE			5			//minimum value for relevance measure (3.5 = relmeas /l1+l2    )
 #define FRAMESIZE		1024		//open gl frame size
 #define DISTTOPOLY		20			//maximum distant to the polygon of reference
 #define CLOSEPOINTS		0.5			//the minimum number of points
 
-#define CHECKCONTOURSNUM 0			//check the number of contours in every frame
 #define LIMITREGION		1			//constraining region, this is for non map objects
 #define EXTERNAL		1			//for region extraction using external contour
 #define MINPOINTS		12			//minimum points
