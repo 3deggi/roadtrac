@@ -1,9 +1,9 @@
 README FILE
 
-roadtrack - program
-functionality : tracking road network using region based descriptor
+roadtrac - program
+functionality : AR maps using road network map tracking
 
-main.h          : parameters for PC version
+main.h          : parameters 
 
 REQUIRED LIBRARIES
 1. OpenCV       : at least 2.3.1
@@ -12,16 +12,13 @@ REQUIRED LIBRARIES
 3. FreeGLUT     
 4. LAPACK & BLAS
 
-Prepare the configuration of the libraries using vsprops for windows
-
 FOLDERS and FILES
 
 main.cpp        : the main program using GLUT
 main.h          : parameters file
 data            : folder for charset
-
 Region.hpp      : get blobs/outline from one image
-Tracker.hpp     : match and track methods
+Tracker.hpp     : match and track method
 
 USAGE
 roadtrac image name.txt annotations.txt
