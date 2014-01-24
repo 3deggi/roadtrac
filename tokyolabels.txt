@@ -1,0 +1,14 @@
+1
+12
+291 213 Palace Hotel Tokyo
+178 186 Imperial Palace
+291 213 Amber Palace
+330 244 Pallas Palace
+269 190 Imperial Palace East Garden
+161 30 Hotel Grand Palace
+159 252 Three Palace Sanctuaries
+201 248 新宮殿
+14 180 Tokyo Green Palace
+18 381 ロータスパレス 赤坂
+201 248 皇居宮殿長和殿
+74 207 Palace Studio Kojimachi
