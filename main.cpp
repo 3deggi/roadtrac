@@ -1,3 +1,10 @@
+/**
+ * Original Author:    Sandy Eggi
+ * Created:   24.01.2014
+ * 
+ * Main opengl app
+ **/
+
 #include "main.h"
 
 void resize(int w, int h)

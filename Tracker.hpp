@@ -1,3 +1,10 @@
+/**
+ * Original Author:    Sandy Eggi
+ * Created:   24.01.2014
+ * 
+ * Tracking the outlines using optimization method
+ **/
+
 #ifndef Tracker_HPP
 #define Tracker_HPP
 

@@ -1,3 +1,10 @@
+/**
+ * Original Author:    Sandy Eggi
+ * Created:   24.01.2014
+ * 
+ * Extracting contours from an image
+ **/
+
 #ifndef REGION_HPP
 #define REGION_HPP
 

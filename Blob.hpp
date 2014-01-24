@@ -1,3 +1,10 @@
+/**
+ * Original Author:    Sandy Eggi
+ * Created:   24.01.2014
+ * 
+ * Blob/contour manipulation, including optimization
+ **/
+
 #ifndef MYBLOB_HPP
 #define MYBLOB_HPP
 

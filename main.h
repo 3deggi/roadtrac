@@ -1,3 +1,10 @@
+/**
+ * Original Author:    Sandy Eggi
+ * Created:   24.01.2014
+ * 
+ * Constants definition
+ **/
+
 #define STR_DIFF		2			//maximum difference for comparison
 #define MINMATCH		10 			//minimum value for matching
 #define IMG_SCALE		2.0			//the image scale for processing image

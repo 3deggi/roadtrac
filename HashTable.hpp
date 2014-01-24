@@ -1,3 +1,10 @@
+/**
+ * Original Author:    Sandy Eggi
+ * Created:   24.01.2014
+ * 
+ * Data structure for saving descriptors from contour
+ **/
+
 #ifndef HASH_HPP
 #define HASH_HPP
 
